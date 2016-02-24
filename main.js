@@ -58,6 +58,12 @@ function ball(context, data){
 		colisionX = posX >= this.width || posX <= 0,
 		colisionY = posY >= this.height|| posY <= 0;
 
+	if( posX < 0 ) posX = 1;
+	if( posY < 0 ) posY = 1;
+	if( posX > this.width ) posX = this.width - 1;
+	if( posY > this.height ) posY = this.height - 1;
+
+
 	if( colisionY || colisionX ){
 		data.lastTime = (new Date()).getTime();
 		data.x = posX;
