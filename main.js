@@ -17,15 +17,9 @@ Canvas = {
 	},
 	draw: function(){
 		var self = this;
-
 		self.context.clearRect(0, 0, self.width, self.height);
 		self.draws.forEach(function( fn, index ){
-
-			self.draws[index][1] = fn[0].call(
-				self,
-				self.context,
-				fn[1]
-			);
+			self.draws[index][1] = fn[0].call(self,self.context,fn[1]);
 		});
 	},
 	draws: [
@@ -50,6 +44,7 @@ Canvas = {
 function ball(context, data){
 
 	data.initialTime = data.initialTime || (new Date()).getTime();
+	data.lastTime = data.lastTime || data.initialTime;
 	data.velocity = data.velocity || 5;
 	data.x = data.x || this.width/2;
 	data.y = data.y || this.width/4;
@@ -57,15 +52,14 @@ function ball(context, data){
 	data.increment = data.increment || 0;
 	data.radius = data.radius || 20;
 			
-	var time = ((new Date()).getTime() - data.initialTime ) * 0.1,
-		posX = data.x + data.velocity * Math.cos( data.angle ) * time,
+	var time = ((new Date()).getTime() - data.lastTime ) * 0.1,
+		posX = data.x + data.velocity * Math.cos( data.angle ) * time;
 		posY = data.y + data.velocity * Math.sin( data.angle ) * time,
 		colisionX = posX >= this.width || posX <= 0,
 		colisionY = posY >= this.height|| posY <= 0;
 
-
 	if( colisionY || colisionX ){
-		data.initialTime = (new Date()).getTime();
+		data.lastTime = (new Date()).getTime();
 		data.x = posX;
 		data.y = posY;
 		if( colisionY )
@@ -74,13 +68,16 @@ function ball(context, data){
 			data.angle = Math.PI - data.angle;
 	}
 	
-	data.velocity += data.increment;
+	if( data.velocity > 1 )
+		data.velocity += data.increment;
+	else
+		data.velocity = 1;
 	
 	context.beginPath();
 	context.arc(posX, posY, data.radius, 0, 2 * Math.PI, false);
 	context.fillStyle = data.color;
 	context.fill();
-	contex.closePath();
+	context.closePath();
 	
 	return data;
 };
