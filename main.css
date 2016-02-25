@@ -6,3 +6,13 @@ body, #container {
 #container {
 	position: fixed;
 }
+
+#author {
+	position: fixed;
+	right: 15px;
+	bottom: 15px;
+	text-decoration: none;
+	font-family: Helvetica, Arial, Sans-serif;
+	font-size: 15px;
+	color:#222;
+}
