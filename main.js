@@ -47,19 +47,19 @@ Canvas = {
 		}, 50);
 	},
 	draws: [
-		[ball, { angle: Math.PI/1.2, color: '#0ba599' }],
-		[ball, { angle: Math.PI/1.4, color: '#300f56' }],
-		[ball, { angle: Math.PI/1.6, color: '#b82a36' }],
-		[ball, { angle: Math.PI/1.8, color: '#e86012' }],
-		[ball, { angle: Math.PI/2.0, color: '#ebbe4b' }],
-		[ball, { angle: Math.PI/2.2, color: '#0ba599' }],
-		[ball, { angle: Math.PI/2.4, color: '#300f56' }],	
-		[ball, { angle: Math.PI/2.6, color: '#b82a36' }],
-		[ball, { angle: Math.PI/2.8, color: '#e86012' }],
-		[ball, { angle: Math.PI/3.0, color: '#ebbe4b' }],
-		[ball, { angle: Math.PI/3.2, color: '#0ba599' }],
-		[ball, { angle: Math.PI/3.4, color: '#300f56' }],
-		[ball, { angle: Math.PI/3.6, color: '#b82a36' }],
+		[ball, { angle: Math.PI/6, color: '#0ba599' }],
+		[ball, { angle: Math.PI/4, color: '#300f56' }],
+		[ball, { angle: Math.PI/3, color: '#b82a36' }],
+		[ball, { angle: 2*Math.PI/3, color: '#e86012' }],
+		[ball, { angle: 3*Math.PI/4, color: '#ebbe4b' }],
+		[ball, { angle: 5*Math.PI/6, color: '#0ba599' }],
+		[ball, { angle: 7*Math.PI/6, color: '#300f56' }],	
+		[ball, { angle: 5*Math.PI/4, color: '#b82a36' }],
+		[ball, { angle: 4*Math.PI/3, color: '#e86012' }],
+		[ball, { angle: 5*Math.PI/3, color: '#ebbe4b' }],
+		[ball, { angle: 7*Math.PI/4, color: '#0ba599' }],
+		[ball, { angle: 11*Math.PI/6, color: '#300f56' }],
+		/*[ball, { angle: Math.PI/3.6, color: '#b82a36' }],
 		[ball, { angle: Math.PI/3.8, color: '#e86012' }],
 		[ball, { angle: Math.PI/4.0, color: '#ebbe4b' }],
 		[ball, { angle: Math.PI/0.1, color: '#0ba599' }],
@@ -70,16 +70,20 @@ Canvas = {
 		[ball, { angle: Math.PI/0.6, color: '#0ba599' }],
 		[ball, { angle: Math.PI/0.7, color: '#300f56' }],
 		[ball, { angle: Math.PI/0.8, color: '#b82a36' }],
-		[ball, { angle: Math.PI/0.9, color: '#e86012' }],
-		[text, { text: "Clique para mudar a animação" }]
+		[ball, { angle: Math.PI/0.9, color: '#e86012' }],*/
+		[text, { text: 'Clique para mudar a animação' }]
 	]
 };
 
 function text(context, data){
+
+	var ratio = 40 / 1000,
+		fontSize = this.width * ratio;
+
 	context.beginPath();
-	context.font = "30px Helvetica, Arial";
-	context.fillStyle = "#000";
-	context.textAlign = "center";
+	context.font = fontSize + 'px Helvetica, Arial';
+	context.fillStyle = '#000';
+	context.textAlign = 'center';
 	context.globalAlpha = 0.6;
 	context.fillText(data.text, this.width/2, this.height/2);
 	context.closePath();
@@ -154,9 +158,12 @@ var newDefault = {
 	increment: 0
 };
 
-window.addEventListener('click', function(){
+function changeAnimation(){
 	var temp = Object.create(newDefault);
 	newDefault = Object.create(Canvas.defaults.ball);
 	Canvas.defaults.ball = temp;
 	Canvas.resetData();
-});
+}
+
+window.addEventListener('click',changeAnimation);
+window.addEventListener('touchstart',changeAnimation);
