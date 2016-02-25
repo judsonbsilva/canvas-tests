@@ -1,8 +1,16 @@
 Canvas = {
 	context: null,
+
+	defaults: {
+		ball: {
+			velocity:1, x:0, y:0,
+			angle: Math.PI/4, alpha: 0.2,
+			increment: 0, radius:100
+		}
+	},
 	runner: function(){
 		Canvas.draw();
-		animationFrame( Canvas.runner );	
+		Canvas.runnerCode = animationFrame( Canvas.runner );
 	},
 	updateSize: function(){
 		this.node.width = this.width = window.innerWidth;
@@ -11,9 +19,10 @@ Canvas = {
 	init: function( domElement ){
 		this.node = document.createElement('CANVAS');
 		this.updateSize();
-		document.getElementById(domElement).appendChild(this.node);
+		this.container = document.getElementById(domElement);
+		this.container.appendChild(this.node);
 		this.context = this.node.getContext('2d');
-		animationFrame(this.runner);
+		this.runnerCode = animationFrame(this.runner);
 	},
 	draw: function(){
 		var self = this;
@@ -21,6 +30,21 @@ Canvas = {
 		self.draws.forEach(function( fn, index ){
 			self.draws[index][1] = fn[0].call(self,self.context,fn[1]);
 		});
+	},
+	resetData:function(){
+		this.container.removeChild( this.node );
+		var self = this;
+		this.draws.forEach(function( fn, index ){
+			self.draws[index][1] = {
+				angle: fn[1].angle,
+				color: fn[1].color,
+				text: fn[1].text
+			};
+		});
+		window.setTimeout(function(){
+			console.log("Run Forrest, run!");
+			self.init('container');
+		}, 50);
 	},
 	draws: [
 		[ball, { angle: Math.PI/1.2, color: '#0ba599' }],
@@ -46,20 +70,34 @@ Canvas = {
 		[ball, { angle: Math.PI/0.6, color: '#0ba599' }],
 		[ball, { angle: Math.PI/0.7, color: '#300f56' }],
 		[ball, { angle: Math.PI/0.8, color: '#b82a36' }],
-		[ball, { angle: Math.PI/0.9, color: '#e86012' }]
+		[ball, { angle: Math.PI/0.9, color: '#e86012' }],
+		[text, { text: "Clique para mudar a animação" }]
 	]
 };
+
+function text(context, data){
+	context.beginPath();
+	context.font = "30px Helvetica, Arial";
+	context.fillStyle = "#000";
+	context.textAlign = "center";
+	context.globalAlpha = 0.6;
+	context.fillText(data.text, this.width/2, this.height/2);
+	context.closePath();
+	context.globalAlpha = 1;
+	return data;
+}
 
 function ball(context, data){
 
 	data.initialTime = data.initialTime || (new Date()).getTime();
 	data.lastTime = data.lastTime || data.initialTime;
-	data.velocity = data.velocity || 5;
-	data.x = data.x || this.width/2;
-	data.y = data.y || this.width/4;
-	data.angle = data.angle || Math.PI/4;
-	data.increment = data.increment || 0;
-	data.radius = data.radius || 20;
+	data.velocity = data.velocity || this.defaults.ball.velocity;
+	data.radius = data.radius || this.defaults.ball.radius;
+	data.x = data.x || this.width /2;
+	data.y = data.y || this.height/2;
+	data.alpha = data.alpha || this.defaults.ball.alpha;
+	data.angle = data.angle || this.defaults.ball.angle;
+	data.increment = data.increment || this.defaults.ball.increment;
 			
 	var time = ((new Date()).getTime() - data.lastTime ) * 0.1,
 		posX = data.x + data.velocity * Math.cos( data.angle ) * time;
@@ -89,6 +127,7 @@ function ball(context, data){
 		data.velocity = 1;
 	
 	context.beginPath();
+	context.globalAlpha = data.alpha;
 	context.arc(posX, posY, data.radius, 0, 2 * Math.PI, false);
 	context.fillStyle = data.color;
 	context.fill();
@@ -105,4 +144,19 @@ window.animationFrame = (function(){
 
 window.addEventListener('resize', function(){
 	Canvas.updateSize.call(Canvas);
+});
+
+var newDefault = {
+	velocity: 5,
+	radius: 20,
+	alpha: 1,
+	angle: Math.PI/4,
+	increment: 0
+};
+
+window.addEventListener('click', function(){
+	var temp = Object.create(newDefault);
+	newDefault = Object.create(Canvas.defaults.ball);
+	Canvas.defaults.ball = temp;
+	Canvas.resetData();
 });
