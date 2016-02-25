@@ -37,7 +37,16 @@ Canvas = {
 		[ball, { angle: Math.PI/3.4, color: '#300f56' }],
 		[ball, { angle: Math.PI/3.6, color: '#b82a36' }],
 		[ball, { angle: Math.PI/3.8, color: '#e86012' }],
-		[ball, { angle: Math.PI/4.0, color: '#ebbe4b' }]
+		[ball, { angle: Math.PI/4.0, color: '#ebbe4b' }],
+		[ball, { angle: Math.PI/0.1, color: '#0ba599' }],
+		[ball, { angle: Math.PI/0.2, color: '#300f56' }],	
+		[ball, { angle: Math.PI/0.3, color: '#b82a36' }],
+		[ball, { angle: Math.PI/0.4, color: '#e86012' }],
+		[ball, { angle: Math.PI/0.5, color: '#ebbe4b' }],
+		[ball, { angle: Math.PI/0.6, color: '#0ba599' }],
+		[ball, { angle: Math.PI/0.7, color: '#300f56' }],
+		[ball, { angle: Math.PI/0.8, color: '#b82a36' }],
+		[ball, { angle: Math.PI/0.9, color: '#e86012' }]
 	]
 };
 
