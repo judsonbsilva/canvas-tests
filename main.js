@@ -40,6 +40,7 @@ Canvas = {
 				color: fn[1].color,
 				text: fn[1].text
 			};
+
 		});
 		window.setTimeout(function(){
 			console.log("Run Forrest, run!");
@@ -50,7 +51,7 @@ Canvas = {
 		[ball, { angle: Math.PI/1.2, color: '#0ba599' }],
 		[ball, { angle: Math.PI/1.4, color: '#300f56' }],
 		[ball, { angle: Math.PI/1.6, color: '#b82a36' }],
-		[ball, { angle: Math.PI/1.8, color: '#e86012' }],
+		/*[ball, { angle: Math.PI/1.8, color: '#e86012' }],
 		[ball, { angle: Math.PI/2.0, color: '#ebbe4b' }],
 		[ball, { angle: Math.PI/2.2, color: '#0ba599' }],
 		[ball, { angle: Math.PI/2.4, color: '#300f56' }],	
@@ -70,7 +71,7 @@ Canvas = {
 		[ball, { angle: Math.PI/0.6, color: '#0ba599' }],
 		[ball, { angle: Math.PI/0.7, color: '#300f56' }],
 		[ball, { angle: Math.PI/0.8, color: '#b82a36' }],
-		[ball, { angle: Math.PI/0.9, color: '#e86012' }],
+		[ball, { angle: Math.PI/0.9, color: '#e86012' }],*/
 		[text, { text: 'Clique para mudar a animação' }]
 	]
 };
@@ -97,8 +98,8 @@ function ball(context, data){
 	data.lastTime = data.lastTime || data.initialTime;
 	data.velocity = data.velocity || this.defaults.ball.velocity;
 	data.radius = data.radius || this.defaults.ball.radius;
-	data.x = data.x || this.width /2;
-	data.y = data.y || this.height/2;
+	data.x = data.x || Math.random() * this.width;
+	data.y = data.y || Math.random() * this.height;
 	data.alpha = data.alpha || this.defaults.ball.alpha;
 	data.angle = data.angle || this.defaults.ball.angle;
 	data.increment = data.increment || this.defaults.ball.increment;
@@ -106,14 +107,13 @@ function ball(context, data){
 	var time = ((new Date()).getTime() - data.lastTime ) * 0.1,
 		posX = data.x + data.velocity * Math.cos( data.angle ) * time;
 		posY = data.y + data.velocity * Math.sin( data.angle ) * time,
-		colisionX = posX >= this.width || posX <= 0,
-		colisionY = posY >= this.height|| posY <= 0;
+		colisionX = posX + data.radius >= this.width || posX - data.radius <= 0,
+		colisionY = posY + data.radius >= this.height|| posY - data.radius <= 0;
 
 	if( posX < 0 ) posX = 1;
 	if( posY < 0 ) posY = 1;
-	if( posX > this.width ) posX = this.width - 1;
+	if( posX > this.width )  posX = this.width - 1;
 	if( posY > this.height ) posY = this.height - 1;
-
 
 	if( colisionY || colisionX ){
 		data.lastTime = (new Date()).getTime();
